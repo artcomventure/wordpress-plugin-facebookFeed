@@ -1,0 +1,55 @@
+# Copyright (C) 2019 artcom venture GmbH
+# This file is distributed under MIT.
+msgid ""
+msgstr ""
+"Project-Id-Version: FAcebook Feed 1.0.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Last-Translator:\n"
+"Language-Team: artcom venture GmbH <info@artcom-venture.de>\n"
+
+msgid "%s and %s"
+msgstr "%s und %s"
+
+msgid "... and display the public content here in your WordPress page."
+msgstr "... und zeige den öffentlichen Inhalt hier auf deiner WordPress-Seite an."
+
+msgid "... or %s"
+msgstr "... oder %s"
+
+msgid "Although it can be understood that way: <b>This doesn't give us permission to manage your Facebook pages!</b> It simply allows the plugin to see a list of your pages and retrieve an access token."
+msgstr "Obwohl es so verstanden werden kann: <b>Dies gibt uns keine Erlaubnis, Deine Facebook-Seiten zu verwalten!</b> Es erlaubt dem Plugin lediglich, eine Liste Deiner Seiten anzuzeigen und ein Zugriffsschlüssel abzurufen."
+
+msgid "Auto-embed your (public) Facebook posts."
+msgstr "Deine (öffentlichen) Facebook-Beiträge automatisch einbetten."
+
+msgid "Cache Lifetime"
+msgstr "Cache-Lebensdauer"
+
+msgid "Connect to your Facebook Page"
+msgstr "Verbinde zu Deiner Facebook-Seite"
+
+msgid "Connect your Facebook Page"
+msgstr "Verbinde Deine Facebook-Seite"
+
+msgid "Display"
+msgstr "Anzeige"
+
+msgid "Don't forget to save!"
+msgstr "Vergiss nicht zu speichern!"
+
+msgid "flush the cache right now"
+msgstr "leere jetzt den Cache"
+
+msgid "Merge the Facebook posts into WordPress' news stream."
+msgstr "Füge die Facebook-Beiträge in den News-Stream von WordPress ein."
+
+msgid "Only after the expiration of %s, a new request will be made to Facebook and (possibly) new content will be loaded."
+msgstr "Erst nach Ablauf von %s, wird eine neue Anfrage an Facebook gestellt und (möglicherweise) neuer Inhalt geladen."
+
+msgid "Select the page you want to display the content of. If your page isn't in the list simply click on the <i>blue button</i> again."
+msgstr "Wähle die Seite aus, deren Inhalt Du anzeigen möchtest. Wenn Deine Seite nicht in der Liste enthalten ist, klicke erneut auf den <i>blauen Button</i>."
+
+msgid "To display the content of your connected Facebook page add the following shortcodes directly into the text box where it should be displayed. Use %s for posts and %s for events."
+msgstr "Um den Inhalt Deiner Facebook-Seite anzuzeigen, füge die folgenden Shortcodes direkt in das Textfeld ein, wo sie angezeigt werden sollen. Verwende %s für Beiträge und %s für Veranstaltungen."

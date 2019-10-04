@@ -1,0 +1,41 @@
+{
+  "name": "wordpress-plugin-facebookFeed",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/artcomventure/wordpress-plugin-facebookFeed.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-csscomb": "^3.0.8",
+    "gulp-cssnano": "^2.1.3",
+    "gulp-gettext": "^0.3.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-replace": "^1.0.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-strip-css-comments": "^2.0.0",
+    "gulp-uglify": "^3.0.2",
+    "gulp-util": "^3.0.8",
+    "uglify-save-license": "^0.4.1"
+  },
+  "description": "Auto-embed your (public) Facebook posts.",
+  "bugs": {
+    "url": "https://github.com/artcomventure/wordpress-plugin-facebookFeed/issues"
+  },
+  "homepage": "https://github.com/artcomventure/wordpress-plugin-facebookFeed#readme",
+  "version": "1.0.0",
+  "main": "gulpfile.js",
+  "dependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Stefan Käsche",
+    "email": "stefan.kaesche@artcom-venture.de",
+    "url": "https://www.artcom-venture.de"
+  }
+}

@@ -1,8 +1,21 @@
-# Facebook Feed to WordPress
+=== Facebook Feed ===
+
+Contributors:
+Donate link:
+Tags: Social, Facebook, Feed, Events
+Requires at least:
+Tested up to:
+Stable tag:
+License: MIT
+License URI: https://github.com/artcomventure/wordpress-plugin-facebookFeed/blob/master/LICENSE
 
 Auto-embed your (public) Facebook posts.
 
-## Installation
+== Description ==
+
+Auto-embed your (public) Facebook posts.
+
+== Installation ==
 
 1. Upload files to the `/wp-content/plugins/` directory of your WordPress installation.
   * Either [download the latest files](https://github.com/artcomventure/wordpress-plugin-facebookFeed/archive/master.zip) and extract zip (optionally rename folder)
@@ -18,11 +31,9 @@ Auto-embed your (public) Facebook posts.
 2. Activate the plugin through the 'Plugins' screen in WordPress.
 3. **Enjoy**
 
-## Usage
+== Usage ==
 
 Once activated you'll find the 'Facebook Feed' settings page listed in the submenu of 'Posts'.
-
-![image](assets/screenshot-1.png)
 
 1. Click on the Facebook Button (will open a popup)
 2. Login to your Facebook account
@@ -30,7 +41,7 @@ Once activated you'll find the 'Facebook Feed' settings page listed in the subme
 
 To display posts/events insert the shortcode `[fbfeed]`/`[fbevents]` into the editor.
 
-## Plugin Updates
+== Plugin Updates ==
 
 Although the plugin is not _yet_ listed on https://wordpress.org/plugins/, you can use WordPress' update functionality to keep it in sync with the files from [GitHub](https://github.com/artcomventure/wordpress-plugin-facebookFeed).
 
@@ -41,6 +52,12 @@ Although the plugin is not _yet_ listed on https://wordpress.org/plugins/, you c
 
 _We test our plugin through its paces, but we advise you to take all safety precautions before the update. Just in case of the unexpected._
 
-## Questions, concerns, needs, suggestions?
+== Questions, concerns, needs, suggestions? ==
 
 Don't hesitate! [Issues](https://github.com/artcomventure/wordpress-plugin-facebookFeed/issues) welcome.
+== Changelog ==
+
+= 1.0.0 - 2019-10-03 =
+**Added**
+
+* Initial file commit.

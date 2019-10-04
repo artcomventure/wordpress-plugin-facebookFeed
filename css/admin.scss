@@ -1,0 +1,157 @@
+#wpbody-content p {
+  max-width: 640px;
+}
+
+.text-danger {
+  color: #dc3232 !important;
+}
+
+.wrap div.submit,
+.wrap p.submit {
+  display: flex;
+  align-items: center;
+
+  > .dashicons {
+    margin: 0 .56em;
+    margin-right: .14em;
+  }
+
+  p {
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .text-danger {
+    padding-top: 3px;
+  }
+
+  .dashicons-arrow-left-alt {
+    animation: point .65s linear infinite;
+    position: relative;
+
+    @keyframes point {
+      0%, 50%, 100% { left: 0; }
+      25% { left: -2px; }
+      75% { left: 2px; }
+    }
+  }
+}
+
+#fb-connect {
+  background-color: #4267b2;
+  color: #fff;
+  border-radius: 5px;
+  padding-right: 17px;
+  padding-left: 14px;
+  flex: 0 0 auto;
+
+  .dashicons {
+    line-height: inherit;
+  }
+}
+
+input[id^="fbfeed-page-"] {
+  display: none;
+
+  &:checked + .vcard {
+    padding-left: 2em;
+
+    &, .dashicons-yes {
+      opacity: 1;
+    }
+  }
+}
+
+.vcard {
+  opacity: .2;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background: linear-gradient(to right, rgba(#000, .05), transparent);
+  padding: 1em;
+  border-radius: 3px;
+  margin-top: 1em;
+  margin-left: .5em;
+  position: relative;
+  transition: padding .2s;
+
+  .dashicons {
+    position: absolute;
+    top: 50%;
+  }
+
+  .dashicons-yes {
+    opacity: 0;
+    background-color: #fff;
+    left: 0;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+
+    &, &:before {
+      width: 30px;
+      height: 30px;
+      font-size: 30px;
+    }
+  }
+
+  img {
+    margin-right: .5em;
+  }
+
+  h3, a {
+    display: block;
+    margin: 0;
+  }
+
+  &:hover {
+    opacity: 1;
+
+    .dashicons-info,
+    .dashicons-trash {
+      opacity: 1;
+    }
+  }
+
+  .dashicons-info,
+  .dashicons-trash {
+    right: 0;
+    transform: translateY(-50%);
+    opacity: .35;
+  }
+
+  ~ .vcard {
+    margin-top: .5em;
+  }
+}
+
+.form-table {
+  display: none;
+
+  .vcard ~ & {
+    display: table;
+  }
+}
+
+[name="fbfeed_cache_lifetime"].small-text {
+  min-width: 100px;
+}
+
+#fbfeed-flush-cache {
+  + .dashicons {
+    display: none;
+    vertical-align: middle;
+
+    &[style*="display: inline;"] {
+      display: inline-block !important;
+    }
+  }
+
+  &.flushing + .dashicons {
+    animation: fbfeed-spin 1s infinite linear;
+
+    @keyframes fbfeed-spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(359deg); }
+    }
+  }
+}

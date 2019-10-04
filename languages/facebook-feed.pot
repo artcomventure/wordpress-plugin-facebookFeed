@@ -1,0 +1,55 @@
+# Copyright (C) 2019 artcom venture GmbH
+# This file is distributed under MIT.
+msgid ""
+msgstr ""
+"Project-Id-Version: FAcebook Feed 1.0.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Last-Translator:\n"
+"Language-Team: artcom venture GmbH <info@artcom-venture.de>\n"
+
+msgid "%s and %s"
+msgstr ""
+
+msgid "... and display the public content here in your WordPress page."
+msgstr ""
+
+msgid "... or %s"
+msgstr ""
+
+msgid "Although it can be understood that way: <b>This doesn't give us permission to manage your Facebook pages!</b> It simply allows the plugin to see a list of your pages and retrieve an access token."
+msgstr ""
+
+msgid "Auto-embed your (public) Facebook posts."
+msgstr ""
+
+msgid "Cache Lifetime"
+msgstr ""
+
+msgid "Connect to your Facebook Page"
+msgstr ""
+
+msgid "Connect your Facebook Page"
+msgstr ""
+
+msgid "Display"
+msgstr ""
+
+msgid "Don't forget to save!"
+msgstr ""
+
+msgid "flush the cache right now"
+msgstr ""
+
+msgid "Merge the Facebook posts into WordPress' news stream."
+msgstr ""
+
+msgid "Only after the expiration of %s, a new request will be made to Facebook and (possibly) new content will be loaded."
+msgstr ""
+
+msgid "Select the page you want to display the content of. If your page isn't in the list simply click on the <i>blue button</i> again."
+msgstr ""
+
+msgid "To display the content of your connected Facebook page add the following shortcodes directly into the text box where it should be displayed. Use %s for posts and %s for events."
+msgstr ""
