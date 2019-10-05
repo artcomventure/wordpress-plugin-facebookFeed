@@ -2,6 +2,9 @@
 
 Auto-embed your (public) Facebook posts.
 
+| ⚠️ **Required Facebook app is waiting for approval** ⚠️ |
+| --- |
+
 ## Installation
 
 1. Upload files to the `/wp-content/plugins/` directory of your WordPress installation.
@@ -24,7 +27,7 @@ Once activated you'll find the 'Facebook Feed' settings page listed in the subme
 
 1. Click on the Facebook Button (will open a popup)
 2. Login to your Facebook account
-3. Select the pages from which you want to display the content on your WordPress Blog
+3. Select the page from which you want to display the content on your WordPress Blog
 
 ![image](assets/screenshot-1.jpg)
 
