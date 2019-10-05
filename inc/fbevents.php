@@ -9,7 +9,7 @@ function fbevents_shortcode( $atts ) {
 		'limit' => -1
 	), $atts, 'fbevents' );
 
-	$transient_key = 'fbevents-' . md5(fbfeed_setting( 'page_id' ) . serialize($atts));
+	$transient_key = 'fbevents-' . md5(get_option( 'fbfeed_page_id' ) . serialize($atts));
 
 	// get cached data
 	if ( !$events = get_transient( $transient_key ) ) {

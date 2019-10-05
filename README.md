@@ -22,11 +22,11 @@ Auto-embed your (public) Facebook posts.
 
 Once activated you'll find the 'Facebook Feed' settings page listed in the submenu of 'Posts'.
 
-![image](assets/screenshot-1.png)
-
 1. Click on the Facebook Button (will open a popup)
 2. Login to your Facebook account
 3. Select the pages from which you want to display the content on your WordPress Blog
+
+![image](assets/screenshot-1.jpg)
 
 To display posts/events insert the shortcode `[fbfeed]`/`[fbevents]` into the editor.
 

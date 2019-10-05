@@ -18,8 +18,11 @@ msgstr "... und zeige den öffentlichen Inhalt hier auf deiner WordPress-Seite a
 msgid "... or %s"
 msgstr "... oder %s"
 
-msgid "Although it can be understood that way: <b>This doesn't give us permission to manage your Facebook pages!</b> It simply allows the plugin to see a list of your pages and retrieve an access token."
-msgstr "Obwohl es so verstanden werden kann: <b>Dies gibt uns keine Erlaubnis, Deine Facebook-Seiten zu verwalten!</b> Es erlaubt dem Plugin lediglich, eine Liste Deiner Seiten anzuzeigen und ein Zugriffsschlüssel abzurufen."
+msgid "Access Token"
+msgstr "Zugangsschlüssel"
+
+msgid "Although it can be understood that way: <b>This doesn't give us permission to manage your Facebook pages!</b> You simply allow <i>us</i> to see a list of your pages and retrieve an access token."
+msgstr "Obwohl es so verstanden werden kann: <b>Dies gibt uns keine Erlaubnis, Deine Facebook-Seiten zu verwalten!</b> Du erlaubst <i>uns</i> lediglich, eine Liste Deiner Seiten anzuzeigen und ein Zugangsschlüssel abzurufen."
 
 msgid "Auto-embed your (public) Facebook posts."
 msgstr "Deine (öffentlichen) Facebook-Beiträge automatisch einbetten."
@@ -39,6 +42,9 @@ msgstr "Anzeige"
 msgid "Don't forget to save!"
 msgstr "Vergiss nicht zu speichern!"
 
+msgid "Facebook Page ID or Name"
+msgstr "Facebook Seiten-ID oder -Name"
+
 msgid "flush the cache right now"
 msgstr "leere jetzt den Cache"
 
@@ -53,3 +59,6 @@ msgstr "Wähle die Seite aus, deren Inhalt Du anzeigen möchtest. Wenn Deine Sei
 
 msgid "To display the content of your connected Facebook page add the following shortcodes directly into the text box where it should be displayed. Use %s for posts and %s for events."
 msgstr "Um den Inhalt Deiner Facebook-Seite anzuzeigen, füge die folgenden Shortcodes direkt in das Textfeld ein, wo sie angezeigt werden sollen. Verwende %s für Beiträge und %s für Veranstaltungen."
+
+msgid "You can display posts from <b>any</b> public Facebook page. Simply click on the edit icon on the right and enter your desired page."
+msgstr "Du kannst Beiträge von <b>jeder</b> öffentlichen Facebook-Seite anzeigen. Klicke einfach auf das Bearbeitungssymbol rechts und gib die gewünschte Seite ein."

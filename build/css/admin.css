@@ -100,8 +100,9 @@ input[id^="fbfeed-page-"]:checked + .vcard .dashicons-yes {
     margin-top: 1em;
     margin-left: .5em;
     padding: 1em;
+    padding-right: 0;
     transition: padding .2s;
-    opacity: .2;
+    opacity: .35;
     border-radius: 3px;
     background: linear-gradient(to right, rgba(0, 0, 0, .05), transparent);
     justify-content: flex-start;
@@ -109,12 +110,23 @@ input[id^="fbfeed-page-"]:checked + .vcard .dashicons-yes {
 }
 
 .vcard .dashicons {
-    position: absolute;
-    top: 50%;
+    cursor: pointer;
+    opacity: .2;
+}
+
+.vcard .dashicons:hover {
+    opacity: 1 !important;
+}
+
+.vcard:hover .dashicons {
+    opacity: .5;
 }
 
 .vcard .dashicons-yes {
+    position: absolute;
+    top: 50%;
     left: 0;
+    cursor: inherit;
     transform: translate(-50%, -50%);
     opacity: 0;
     border-radius: 50%;
@@ -130,32 +142,49 @@ input[id^="fbfeed-page-"]:checked + .vcard .dashicons-yes {
 
 .vcard img {
     margin-right: .5em;
+    flex-shrink: 0;
+}
+
+.vcard div.page-info,
+.vcard div.page-edit {
+    flex-grow: 1;
+}
+
+.vcard div.page-edit {
+    display: none;
+}
+
+.vcard div.page-edit .dashicons-no-alt {
+    margin-top: -2px;
+    vertical-align: middle;
+}
+
+.vcard.edit div.page-edit {
+    display: block;
+}
+
+.vcard.edit div.page-info,
+.vcard.edit .actions .dashicons-edit {
+    display: none;
 }
 
 .vcard h3,
-.vcard a {
+.vcard a,
+.vcard b {
     display: block;
     margin: 0;
 }
 
-.vcard:hover {
-    opacity: 1;
-}
-
-.vcard:hover .dashicons-info,
-.vcard:hover .dashicons-trash {
-    opacity: 1;
-}
-
-.vcard .dashicons-info,
-.vcard .dashicons-trash {
-    right: 0;
-    transform: translateY(-50%);
-    opacity: .35;
+.vcard + p.description {
+    margin-top: 1.3em;
 }
 
 .vcard ~ .vcard {
     margin-top: .5em;
+}
+
+.vcard:first-of-type:last-of-type {
+    cursor: inherit;
 }
 
 .form-table {

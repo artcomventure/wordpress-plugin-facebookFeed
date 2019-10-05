@@ -1,22 +1,21 @@
 <?php
 
-// enqueue admin script
-use MongoDB\Driver\Exception\ExecutionTimeoutException;
-
+// enqueue admin styles and script
 add_action( 'admin_enqueue_scripts', function( $hook ) {
 	if ( $hook != 'posts_page_facebook-feed' ) return;
-	wp_enqueue_style( 'fbfeed-settings', FBFEED_PLUGIN_URL . 'css/admin.css', array(), '20190926' );
 
-	wp_enqueue_script( 'fbfeed-settings', FBFEED_PLUGIN_URL . 'js/admin.min.js', array(), '20190926', true );
+	wp_enqueue_style( 'fbfeed-settings', FBFEED_PLUGIN_URL . 'css/admin.css', array(), get_plugin_data( FBFEED_PLUGIN_FILE )['Version'] );
+
+	wp_enqueue_script( 'fbfeed-settings', FBFEED_PLUGIN_URL . 'js/admin.min.js', array(), get_plugin_data( FBFEED_PLUGIN_FILE )['Version'], true );
 	wp_add_inline_script( 'fbfeed-settings', "FBFEED_APP_ID = '" . FBFEED_APP_ID ."';
 FBFEED_REDIRECT_URI = '" . apply_filters( 'fbfeed_redirect_uri', 'https://www.artcom-venture.de/wordpress-plugin-facebook-feed.php' ) ."';
 FBFEED_MENU_PAGE_URL = '" . menu_page_url( 'facebook-feed', false ) . "';" );
 } );
 
-// register settings options
+// register options
 add_action( 'admin_init', function() {
-	register_setting( 'fbfeed', 'fbfeed' );
-	register_setting( 'fbfeed', 'fbfeed_bearer_token' );
+	register_setting( 'fbfeed', 'fbfeed_page_id' );
+	register_setting( 'fbfeed', 'fbfeed_access_token' );
 	register_setting( 'fbfeed', 'fbfeed_in_posts' );
 	register_setting( 'fbfeed', 'fbfeed_cache_lifetime' );
 } );
@@ -32,17 +31,9 @@ add_action( 'admin_menu', function() {
 		function() {
 			$fb = fbfeed_get_sdk();
 
-			$connecting = false;
-
 			// redirect from Facebook with access token
-		    if ( isset($_GET['access_token']) ) {
-			    $connecting = true;
-
+		    if ( $connecting = isset($_GET['access_token']) ) {
 		        try {
-			        // get token data
-			        $token_data = $fb->get( add_query_arg( array( 'input_token' => $_GET['access_token'] ), '/debug_token' ), $_GET['access_token'] );
-			        $token_data = $token_data->getDecodedBody()['data'];
-
 			        // get long time access token
 			        $access_token = $fb->get( add_query_arg( array(
 				        'client_id' => FBFEED_APP_ID,
@@ -50,25 +41,17 @@ add_action( 'admin_menu', function() {
 				        'grant_type' => 'fb_exchange_token',
 				        'fb_exchange_token' => $_GET['access_token']
 			        ), '/oauth/access_token' ), $_GET['access_token'] );
-			        $access_token = $access_token->getDecodedBody()['access_token'];
 
-			        update_option( 'fbfeed_bearer_token', $access_token );
+			        update_option( 'fbfeed_access_token', $access_token = $access_token->getDecodedBody()['access_token'] );
+			        // set/re-new just requested access token
+			        $fb->setDefaultAccessToken( $access_token );
 
-			        // get selected pages
-			        $pages = $fb->get( '/' . $token_data['user_id'] . '/accounts', $access_token );
-			        foreach ( $pages = $pages->getDecodedBody()['data'] as $i => $page ) {
-			            $pages[$i] = array(
-			                'page_id' => $page['id'],
-			                'access_token' => $page['access_token'],
-                        );
-                    }
+			        // get users app-connected pages
+			        $pages = $fb->get( '/me/accounts' );
+			        $pages = array_column( $pages->getDecodedBody()['data'], 'id' );
                 }
-                catch( Exception $e ) {
-	                $connecting = false;
-		            $pages = array();
-                }
-            }
-		    else $pages = array_filter(array(array_filter(fbfeed_settings()))); ?>
+                catch( Exception $e ) {}
+            } ?>
 
 			<div class="wrap">
 				<h1><?php _e( 'Connect to your Facebook Page', 'fbfeed' ); ?></h1>
@@ -84,97 +67,116 @@ add_action( 'admin_menu', function() {
                     </button>
                     <span class="dashicons dashicons-info"></span>
                     <p class="description">
-                        <?php _e( "Although it can be understood that way: <b>This doesn't give us permission to manage your Facebook pages!</b> It simply allows the plugin to see a list of your pages and retrieve an access token.", 'fbfeed' ); ?>
+                        <?php _e( "Although it can be understood that way: <b>This doesn't give us permission to manage your Facebook pages!</b> You simply allow <i>us</i> to see a list of your pages and retrieve an access token.", 'fbfeed' ); ?>
                     </p>
                 </div>
 
                 <form id="fbfeed-settings-form" method="post" action="options.php">
-	                <?php settings_fields( 'fbfeed' ); ?>
+	                <?php settings_fields( 'fbfeed' );
 
-                        <?php if ( $pages ) {
-                            $current_page_id = fbfeed_setting( 'page_id' );
-                            // current page id isn't in pages anymore
-                            if ( !in_array( $current_page_id, array_column( $pages, 'page_id' ) ) ) $current_page_id = '';
+	                // no pages => not connecting
+                    // ... so maybe get current Facebook page ID
+                    if ( empty($pages) && $page_id = get_option( 'fbfeed_page_id' ) ) $pages = array( $page_id );
 
-                            if ( count($pages) > 1 ) {
-                                echo '<p class="description">' . __( "Select the page you want to display the content of. If your page isn't in the list simply click on the <i>blue button</i> again.", 'fbfeed' ) . '</p>';
-                            }
+	                if ( $pages ) {
+		                if ( count($pages) > 1 ) {
+			                echo '<p class="description">' . __( "Select the page you want to display the content of. If your page isn't in the list simply click on the <i>blue button</i> again.", 'fbfeed' ) . '</p>';
+		                }
 
-	                        foreach ( $pages as $i => $page ) {
-		                        try {
-			                        $info = $fb->get( add_query_arg( array( 'fields' => 'name,link,picture{url}' ), '/' . $page['page_id'] ), $page['access_token'] );
-			                        $info = $info->getDecodedBody();
+		                foreach ( $pages as $i => $page_id ) {
+			                try {
+			                    // get page data
+				                $page_data = $fb->get( add_query_arg( array( 'fields' => 'name,link,picture{url}' ), "/{$page_id}" ) );
+				                $page_data = $page_data->getDecodedBody(); ?>
 
-			                        echo '<input' . checked( $page['page_id'], $current_page_id ?: !$i ? $page['page_id'] : '', false ) . ' type="radio" name="fbfeed[page_id]" value="' . $page['page_id'] . '" id="fbfeed-page-' . $page['page_id'] . '" />';
-			                        echo '<label class="vcard" for="fbfeed-page-' . $page['page_id'] . '">';
-			                        echo '<span class="dashicons dashicons-yes"></span>';
-			                        echo '<img src="' . $info['picture']['data']['url'] . '" />';
-			                        echo '<div><h3>' . $info['name'] . '</h3><a href="' . $info['link'] . '" target="_blank">' . $info['link'] . '</a></div>';
-			                        echo '<span class="dashicons dashicons-trash" title="' . __( 'Delete' ) . '"></span>';
+                                <input<?php checked( $page_id, get_option( 'fbfeed_page_id', $i ?: $page_id ) ) ?>
+                                    type="radio" name="fbfeed_page_id" value="<?php echo $page_id ?>" id="fbfeed-page-<?php echo $page_id ?>" />
 
-			                        $debug = $fb->get( add_query_arg( array( 'input_token' => $page['access_token'] ), '/debug_token' ), $page['access_token'] );
-			                        $debug = $debug->getDecodedBody();
+				                <label class="vcard" for="fbfeed-page-<?php echo $page_id ?>">
 
-			                        if ( $debug['data']['expires_at'] ) {
-			                            echo '<span class="dashicons dashicons-info" title="' . sprintf( __( 'Access token only valid till %s', 'fbfeed' ), date_i18n( get_option( 'date_format' ), $debug['data']['expires_at'] ) ) . '"></span>';
-			                        }
+                                    <span class="dashicons dashicons-yes"></span>
+                                    <img src="<?php echo $page_data['picture']['data']['url'] ?>" />
 
-			                        echo '</label>';
+                                    <div class="page-info">
+                                        <h3><?php echo $page_data['name'] ?></h3>
+                                        <a href="<?php echo $page_data['link'] ?>" target="_blank"><?php echo $page_data['link'] ?></a>
+                                    </div>
 
-			                        echo '<input type="hidden" name="fbfeed[access_token][' . $page['page_id'] . ']" value="' . $page['access_token'] . '" />';
-		                        }
-		                        catch ( Exception $e ) {
-			                        echo '<div class="error inline"><p>'
-			                             . sprintf( __( '<strong>ERROR</strong>: %s', 'fbfeed' ), $e->getMessage() )
-			                             . ' <b>' . __( 'Try to re-connect your Facebook page by clicking on the <i>blue button</i>.', 'fbfeed' ) . '</b>'
-			                             . '</p></div>';
-		                        }
-	                        }
-                        } ?>
+                                    <div class="page-edit">
+                                        <b><?php _e( 'Facebook Page ID or Name', 'fbfeed' ) ?></b>
+                                        <input type="text" value="" class="regular-text" name="fbfeed_page_id_override" placeholder="<?php echo $page_id ?>" />
+                                        <span class="dashicons dashicons-no-alt" title="<?php _e( 'Cancel' ) ?>"></span>
+                                    </div>
 
-                    <?php if ( count($pages) ) : ?>
+                                    <?php if ( !$connecting ) : ?>
+                                    <div class="actions">
+                                        <span class="dashicons dashicons-edit" title="<?php _e( 'Edit' ) ?>"></span>
+                                        <span class="dashicons dashicons-trash" title="<?php _e( 'Delete' ) ?>"></span>
+                                    </div>
+                                    <?php endif; ?>
+
+				                </label>
+
+                            <?php if ( !$connecting ) {
+                                    echo '<p class="description">' . __( 'You can display posts from <b>any</b> public Facebook page. Simply click on the edit icon on the right and enter your desired page.', 'fbfeed' ) . '</p>';
+                                }
+			                }
+			                catch ( Exception $e ) {
+				                echo '<div class="error inline"><p>'
+				                     . sprintf( __( '<strong>ERROR</strong>: %s', 'fbfeed' ), $e->getMessage() )
+				                     . ' <b>' . __( 'Try to re-connect your Facebook page by clicking on the <i>blue button</i>.', 'fbfeed' ) . '</b>'
+				                     . '</p></div>';
+			                }
+		                } ?>
 
                         <table class="form-table">
                             <tbody>
 
+                            <tr hidden valign="top">
+                                <th scope="row"><label for="fbfeed-access-token"><?php _e( 'Access Token', 'fbfeed' ); ?></label></th>
+                                <td><textarea readonly="readonly" id="fbfeed-access-token" name="fbfeed_access_token" cols="50" rows="4"><?php
+                                    echo get_option( 'fbfeed_access_token' );
+                                ?></textarea></td>
+                            </tr>
+
                             <tr valign="top">
                                 <th scope="row"><label for="fbfeed-cache-lifetime"><?php _e( 'Cache Lifetime', 'fbfeed' ); ?></label></th>
                                 <td>
-				                    <?php $default_cache_lifetime = apply_filters( 'wp_feed_cache_transient_lifetime', 12 * HOUR_IN_SECONDS, 'fbfeed' );
-				                    $fbfeed_cache_lifetime = fbfeed_cache_lifetime();
-				                    printf( __( '%s seconds' ), '<input type="number" class="small-text" name="fbfeed_cache_lifetime" placeholder="' . $default_cache_lifetime . '" value="' . (get_option( 'fbfeed_cache_lifetime') ?: '') . '" />' ); ?>
-                                    <?php $span = array();
-                                    if ( $days = floor($fbfeed_cache_lifetime/DAY_IN_SECONDS) ) {
-	                                    $fbfeed_cache_lifetime -= $days * DAY_IN_SECONDS;
-	                                    $span[] = sprintf( _n('%s day', '%s days', $days ), $days );
-                                    } ?>
+					                <?php $default_cache_lifetime = apply_filters( 'wp_feed_cache_transient_lifetime', 12 * HOUR_IN_SECONDS, 'fbfeed' );
+					                $fbfeed_cache_lifetime = fbfeed_cache_lifetime();
+					                printf( __( '%s seconds' ), '<input id="fbfeed-cache-lifetime" type="number" class="small-text" name="fbfeed_cache_lifetime" placeholder="' . $default_cache_lifetime . '" value="' . get_option( 'fbfeed_cache_lifetime', '') . '" />' ); ?>
+					                <?php $span = array();
+					                if ( $days = floor($fbfeed_cache_lifetime/DAY_IN_SECONDS) ) {
+						                $fbfeed_cache_lifetime -= $days * DAY_IN_SECONDS;
+						                $span[] = sprintf( _n('%s day', '%s days', $days ), $days );
+					                } ?>
 
-	                                <?php if ( $hours = floor($fbfeed_cache_lifetime/HOUR_IN_SECONDS) ) {
-		                                $fbfeed_cache_lifetime -= $hours * HOUR_IN_SECONDS;
-		                                $span[] = sprintf( _n('%s hour', '%s hours', $hours ), $hours );
-	                                }
+					                <?php if ( $hours = floor($fbfeed_cache_lifetime/HOUR_IN_SECONDS) ) {
+						                $fbfeed_cache_lifetime -= $hours * HOUR_IN_SECONDS;
+						                $span[] = sprintf( _n('%s hour', '%s hours', $hours ), $hours );
+					                }
 
-	                                if ( $minutes = floor($fbfeed_cache_lifetime/MINUTE_IN_SECONDS) ) {
-		                                $fbfeed_cache_lifetime -= $minutes * MINUTE_IN_SECONDS;
-		                                $span[] = sprintf( _n('%s minute', '%s minutes', $minutes ), $minutes );
-	                                }
+					                if ( $minutes = floor($fbfeed_cache_lifetime/MINUTE_IN_SECONDS) ) {
+						                $fbfeed_cache_lifetime -= $minutes * MINUTE_IN_SECONDS;
+						                $span[] = sprintf( _n('%s minute', '%s minutes', $minutes ), $minutes );
+					                }
 
-	                                if ( $seconds = $fbfeed_cache_lifetime ) {
-		                                $span[] = sprintf( _n('%s second', '%s seconds', $seconds ), $seconds );
-	                                }
+					                if ( $seconds = $fbfeed_cache_lifetime ) {
+						                $span[] = sprintf( _n('%s second', '%s seconds', $seconds ), $seconds );
+					                }
 
-	                                // format 'XX, XX, and XX'
-	                                $last_span = array_pop($span);
-	                                if ( $span ) $span = sprintf( __( '%s and %s', 'fbfeed' ), implode( ', ', $span ), $last_span );
-	                                else $span = $last_span; ?>
+					                // format 'XX, XX, and XX'
+					                $last_span = array_pop($span);
+					                if ( $span ) $span = sprintf( __( '%s and %s', 'fbfeed' ), implode( ', ', $span ), $last_span );
+					                else $span = $last_span; ?>
 
                                     <p class="description">
-                                        <?php printf(
-						                    __( 'Only after the expiration of %s, a new request will be made to Facebook and (possibly) new content will be loaded.', 'fbfeed' ),
-		                                    $span );
-                                        printf( __( '... or %s', 'fbfeed' ),
-		                                    '<button id="fbfeed-flush-cache" class="button button-small">' . __( 'flush the cache right now', 'fbfeed' ) . '</button><span class="dashicons dashicons-update"></span>'
-	                                    ); ?>
+						                <?php printf(
+							                __( 'Only after the expiration of %s, a new request will be made to Facebook and (possibly) new content will be loaded.', 'fbfeed' ),
+							                $span );
+						                printf( __( '... or %s', 'fbfeed' ),
+							                '<button id="fbfeed-flush-cache" class="button button-small">' . __( 'flush the cache right now', 'fbfeed' ) . '</button><span class="dashicons dashicons-update"></span>'
+						                ); ?>
                                     </p>
                                 </td>
                             </tr>
@@ -182,21 +184,20 @@ add_action( 'admin_menu', function() {
                             </tbody>
                         </table>
 
-                    <p class="submit">
-	                    <?php submit_button( '', 'primary', 'submit', false );
-	                    if ( $connecting )
-	                        echo '&nbsp;&nbsp;<strong class="text-danger"><span class="dashicons dashicons-arrow-left-alt"></span> ' . __( "Don't forget to save!", 'fbfeed' ) . '</strong>'; ?>
-                    </p>
+                        <p class="submit">
+			                <?php submit_button( '', 'primary', 'submit', false );
+			                echo '&nbsp;&nbsp;<strong id="save-note"' . (!$connecting ? ' hidden' : '') . ' class="text-danger"><span class="dashicons dashicons-arrow-left-alt"></span> ' . __( "Don't forget to save!", 'fbfeed' ) . '</strong>'; ?>
+                        </p>
 
                         <h2><?php _e( 'Display', 'fbfeed' ); ?></h2>
 
-	                    <?php echo '<p hidden><label><input type="checkbox" name="fbfeed_in_posts" value="1"' . checked( 1, get_option( 'fbfeed_in_posts', 0 ) ) . ' /> ' .
-	                               __( "Merge the Facebook posts into WordPress' news stream.", 'fbfeed' ) .  '</label></p>';
+		                <?php echo '<p hidden><label><input type="checkbox" name="fbfeed_in_posts" value="1"' . checked( 1, get_option( 'fbfeed_in_posts', 0 ) ) . ' /> ' .
+		                           __( "Merge the Facebook posts into WordPress' news stream.", 'fbfeed' ) .  '</label></p>';
 
-	                    $manual = 'To display the content of your connected Facebook page add the following shortcodes directly into the text box where it should be displayed. Use %s for posts and %s for events.';
-	                    echo '<p>' . sprintf( __( $manual, 'fbfeed' ), '<code class="copy-me">[fbfeed]</code>', '<code class="copy-me">[fbevents]</code>' ) . '</p>'; ?>
+		                $manual = 'To display the content of your connected Facebook page add the following shortcodes directly into the text box where it should be displayed. Use %s for posts and %s for events.';
+		                echo '<p>' . sprintf( __( $manual, 'fbfeed' ), '<code class="copy-me">[fbfeed]</code>', '<code class="copy-me">[fbevents]</code>' ) . '</p>'; ?>
 
-	                <?php endif; ?>
+	                <?php } ?>
                 </form>
 			</div>
 
@@ -205,8 +206,8 @@ add_action( 'admin_menu', function() {
 } );
 
 add_filter( 'pre_update_option', function( $value, $option, $old_value ) {
-    if ( $option == 'fbfeed' && isset($value['access_token']) && is_array($value['access_token']) ) {
-	    $value['access_token'] = $value['access_token'][$value['page_id']];
+    if ( $option == 'fbfeed_page_id' && !empty($_POST['fbfeed_page_id_override']) ) {
+	    $value = $_POST['fbfeed_page_id_override'];
     }
 
     return $value;

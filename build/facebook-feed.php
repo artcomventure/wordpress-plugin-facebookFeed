@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Facebook Feed
  * Description: Auto-embed your (public) Facebook posts.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Text Domain: fbfeed
  * Author: artcom venture GmbH
  * Author URI: http://www.artcom-venture.de/
@@ -23,19 +23,6 @@ add_action( 'after_setup_theme', function() {
 	load_theme_textdomain( 'fbfeed', FBFEED_PLUGIN_DIR . 'languages' );
 } );
 
-function fbfeed_setting( $setting = null ) {
-	$settings = fbfeed_settings();
-	if ( isset( $settings[$setting] ) ) return $settings[$setting];
-	return null;
-}
-
-function fbfeed_settings() {
-	$settings = get_option( 'fbfeed', array() );
-	if ( !is_array( $settings ) ) $settings = array();
-
-	return $settings + array( 'page_id' => '', 'access_token' => ''  );
-}
-
 // get Facebook's SDK
 function fbfeed_get_sdk() {
 	require_once( FBFEED_PLUGIN_DIR . 'facebook-php-graph-sdk/autoload.php' );
@@ -46,14 +33,14 @@ function fbfeed_get_sdk() {
 		'default_graph_version' => FB_GRAPH_VERSION,
 	) );
 
-	if ( $access_token = fbfeed_setting( 'access_token' ) )
+	if ( $access_token = get_option( 'fbfeed_access_token' ) )
 		$fb->setDefaultAccessToken( $access_token );
 
 	return $fb;
 }
 
 function fbfeed_get_endpoint( $endpoint, $query = array() ) {
-	return add_query_arg( $query, '/' . fbfeed_setting( 'page_id' ) . "/{$endpoint}" );
+	return add_query_arg( $query, '/' . get_option( 'fbfeed_page_id' ) . "/{$endpoint}" );
 }
 
 function fbfeed_cache_lifetime() {
@@ -62,7 +49,7 @@ function fbfeed_cache_lifetime() {
 
 // enqueue scripts and styles
 add_action( 'wp_enqueue_scripts', function() {
-	wp_enqueue_style( 'fbevents', FBFEED_PLUGIN_URL . '/css/fbevents.min.css' );
+	wp_enqueue_style( 'fbevents', FBFEED_PLUGIN_URL . '/css/fbevents.min.css', array(), get_plugin_data( FBFEED_PLUGIN_FILE )['Version'] );
 } );
 
 // auto-include first level /inc/ files
@@ -88,7 +75,8 @@ add_filter( 'site_transient_update_plugins', function ( $value ) {
 register_deactivation_hook( FBFEED_PLUGIN_FILE, 'fbfeed_on_uninstall' );
 register_uninstall_hook( FBFEED_PLUGIN_FILE, 'fbfeed_on_uninstall' );
 function fbfeed_on_uninstall() {
-	delete_option( 'fbfeed' );
+	delete_option( 'fbfeed_page_id' );
+	delete_option( 'fbfeed_access_token' );
 	delete_option( 'fbfeed_in_posts' );
 	delete_option( 'fbfeed_cache_lifetime' );
 	fbfeed_flush_cache();

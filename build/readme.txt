@@ -57,6 +57,11 @@ _We test our plugin through its paces, but we advise you to take all safety prec
 Don't hesitate! [Issues](https://github.com/artcomventure/wordpress-plugin-facebookFeed/issues) welcome.
 == Changelog ==
 
+= 1.1.0 - 2019-10-05 =
+**Added**
+
+* Edit page ID (name) once the access token is received.
+
 = 1.0.0 - 2019-10-03 =
 **Added**
 
