@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1 - 2019-10-06
+**Fixed**
+
+* Fatal PHP error on `get_plugin_data()` :/
+
 ## 1.1.0 - 2019-10-05
 **Added**
 

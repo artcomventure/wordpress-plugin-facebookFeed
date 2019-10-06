@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Facebook Feed
  * Description: Auto-embed your (public) Facebook posts.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Text Domain: fbfeed
  * Author: artcom venture GmbH
  * Author URI: http://www.artcom-venture.de/
@@ -47,9 +47,17 @@ function fbfeed_cache_lifetime() {
 	return get_option( 'fbfeed_cache_lifetime') ?: apply_filters( 'wp_feed_cache_transient_lifetime', 12 * HOUR_IN_SECONDS, 'fbfeed' );
 }
 
+function fbfeed_version() {
+	if ( !function_exists('get_plugin_data' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	}
+
+	return get_plugin_data( FBFEED_PLUGIN_FILE )['Version'];
+}
+
 // enqueue scripts and styles
 add_action( 'wp_enqueue_scripts', function() {
-	wp_enqueue_style( 'fbevents', FBFEED_PLUGIN_URL . '/css/fbevents.min.css', array(), get_plugin_data( FBFEED_PLUGIN_FILE )['Version'] );
+	wp_enqueue_style( 'fbevents', FBFEED_PLUGIN_URL . '/css/fbevents.min.css', array(), fbfeed_version() );
 } );
 
 // auto-include first level /inc/ files

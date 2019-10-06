@@ -4,9 +4,9 @@
 add_action( 'admin_enqueue_scripts', function( $hook ) {
 	if ( $hook != 'posts_page_facebook-feed' ) return;
 
-	wp_enqueue_style( 'fbfeed-settings', FBFEED_PLUGIN_URL . 'css/admin.css', array(), get_plugin_data( FBFEED_PLUGIN_FILE )['Version'] );
+	wp_enqueue_style( 'fbfeed-settings', FBFEED_PLUGIN_URL . 'css/admin.css', array(), fbfeed_version() );
 
-	wp_enqueue_script( 'fbfeed-settings', FBFEED_PLUGIN_URL . 'js/admin.min.js', array(), get_plugin_data( FBFEED_PLUGIN_FILE )['Version'], true );
+	wp_enqueue_script( 'fbfeed-settings', FBFEED_PLUGIN_URL . 'js/admin.min.js', array(), fbfeed_version(), true );
 	wp_add_inline_script( 'fbfeed-settings', "FBFEED_APP_ID = '" . FBFEED_APP_ID ."';
 FBFEED_REDIRECT_URI = '" . apply_filters( 'fbfeed_redirect_uri', 'https://www.artcom-venture.de/wordpress-plugin-facebook-feed.php' ) ."';
 FBFEED_MENU_PAGE_URL = '" . menu_page_url( 'facebook-feed', false ) . "';" );
@@ -102,13 +102,13 @@ add_action( 'admin_menu', function() {
                                         <a href="<?php echo $page_data['link'] ?>" target="_blank"><?php echo $page_data['link'] ?></a>
                                     </div>
 
+					                <?php if ( !$connecting ) : ?>
                                     <div class="page-edit">
                                         <b><?php _e( 'Facebook Page ID or Name', 'fbfeed' ) ?></b>
                                         <input type="text" value="" class="regular-text" name="fbfeed_page_id_override" placeholder="<?php echo $page_id ?>" />
                                         <span class="dashicons dashicons-no-alt" title="<?php _e( 'Cancel' ) ?>"></span>
                                     </div>
 
-                                    <?php if ( !$connecting ) : ?>
                                     <div class="actions">
                                         <span class="dashicons dashicons-edit" title="<?php _e( 'Edit' ) ?>"></span>
                                         <span class="dashicons dashicons-trash" title="<?php _e( 'Delete' ) ?>"></span>

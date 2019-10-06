@@ -15,6 +15,9 @@ Auto-embed your (public) Facebook posts.
 
 Auto-embed your (public) Facebook posts.
 
+| ⚠️ **Required Facebook app is waiting for approval** ⚠️ |
+| --- |
+
 == Installation ==
 
 1. Upload files to the `/wp-content/plugins/` directory of your WordPress installation.
@@ -37,7 +40,7 @@ Once activated you'll find the 'Facebook Feed' settings page listed in the subme
 
 1. Click on the Facebook Button (will open a popup)
 2. Login to your Facebook account
-3. Select the pages from which you want to display the content on your WordPress Blog
+3. Select the page from which you want to display the content on your WordPress Blog
 
 To display posts/events insert the shortcode `[fbfeed]`/`[fbevents]` into the editor.
 
@@ -56,6 +59,11 @@ _We test our plugin through its paces, but we advise you to take all safety prec
 
 Don't hesitate! [Issues](https://github.com/artcomventure/wordpress-plugin-facebookFeed/issues) welcome.
 == Changelog ==
+
+= 1.1.1 - 2019-10-06 =
+**Fixed**
+
+* Fatal PHP error on `get_plugin_data()` :/
 
 = 1.1.0 - 2019-10-05 =
 **Added**
