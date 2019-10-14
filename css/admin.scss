@@ -75,6 +75,7 @@ input[id^="fbfeed-page-"] {
   margin-left: .5em;
   position: relative;
   transition: padding .2s;
+  max-width: 882px;
 
   .dashicons {
     cursor: pointer;

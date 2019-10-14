@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0 - 2019-10-14
+**Added**
+
+* Height config for events.
+
 ## 1.1.1 - 2019-10-06
 **Fixed**
 

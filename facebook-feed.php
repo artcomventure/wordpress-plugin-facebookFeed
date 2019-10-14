@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Facebook Feed
  * Description: Auto-embed your (public) Facebook posts.
- * Version: 1.1.1
+ * Version: 1.2.0
  * Text Domain: fbfeed
  * Author: artcom venture GmbH
  * Author URI: http://www.artcom-venture.de/
@@ -80,7 +80,7 @@ add_filter( 'site_transient_update_plugins', function ( $value ) {
 } );
 
 // plugin uninstallation
-register_deactivation_hook( FBFEED_PLUGIN_FILE, 'fbfeed_on_uninstall' );
+//register_deactivation_hook( FBFEED_PLUGIN_FILE, 'fbfeed_on_uninstall' );
 register_uninstall_hook( FBFEED_PLUGIN_FILE, 'fbfeed_on_uninstall' );
 function fbfeed_on_uninstall() {
 	delete_option( 'fbfeed_page_id' );

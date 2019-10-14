@@ -6,7 +6,8 @@
 add_shortcode( 'fbevents', 'fbevents_shortcode' );
 function fbevents_shortcode( $atts ) {
 	$atts = shortcode_atts( array(
-		'limit' => -1
+		'limit' => -1,
+		'height' => '' // max-height auto
 	), $atts, 'fbevents' );
 
 	$transient_key = 'fbevents-' . md5(get_option( 'fbfeed_page_id' ) . serialize($atts));
@@ -65,5 +66,5 @@ function fbevents_shortcode( $atts ) {
 		ob_end_clean();
 	}
 
-	return '<div class="fbevents"><ul><li>' . implode( '</li><li>', $events ) . '</li></ul></div>';
+	return '<div class="fbevents"><ul' . (is_numeric($atts['height']) ? ' style="max-height: ' . $atts['height'] . 'px;"' : '') . '><li>' . implode( '</li><li>', $events ) . '</li></ul></div>';
 }

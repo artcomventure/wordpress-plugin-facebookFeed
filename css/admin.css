@@ -97,6 +97,7 @@ input[id^="fbfeed-page-"]:checked + .vcard .dashicons-yes {
 .vcard {
     position: relative;
     display: flex;
+    max-width: 882px; 
     margin-top: 1em;
     margin-left: .5em;
     padding: 1em;
