@@ -2,9 +2,6 @@
 
 Auto-embed your (public) Facebook posts.
 
-| ⚠️ **Required Facebook app is waiting for approval** ⚠️ |
-| --- |
-
 ## Installation
 
 1. Upload files to the `/wp-content/plugins/` directory of your WordPress installation.
