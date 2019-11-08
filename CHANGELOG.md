@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.1 - 2019-11-08
+**Fixed**
+
+* Undefined variable.
+
 ## 1.2.0 - 2019-10-14
 **Added**
 

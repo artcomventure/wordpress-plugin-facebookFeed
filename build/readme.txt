@@ -15,9 +15,6 @@ Auto-embed your (public) Facebook posts.
 
 Auto-embed your (public) Facebook posts.
 
-| ⚠️ **Required Facebook app is waiting for approval** ⚠️ |
-| --- |
-
 == Installation ==
 
 1. Upload files to the `/wp-content/plugins/` directory of your WordPress installation.
@@ -59,6 +56,11 @@ _We test our plugin through its paces, but we advise you to take all safety prec
 
 Don't hesitate! [Issues](https://github.com/artcomventure/wordpress-plugin-facebookFeed/issues) welcome.
 == Changelog ==
+
+= 1.2.1 - 2019-11-08 =
+**Fixed**
+
+* Undefined variable.
 
 = 1.2.0 - 2019-10-14 =
 **Added**

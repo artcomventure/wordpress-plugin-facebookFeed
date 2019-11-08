@@ -78,7 +78,7 @@ add_action( 'admin_menu', function() {
                     // ... so maybe get current Facebook page ID
                     if ( empty($pages) && $page_id = get_option( 'fbfeed_page_id' ) ) $pages = array( $page_id );
 
-	                if ( $pages ) {
+	                if ( !empty($pages) ) {
 		                if ( count($pages) > 1 ) {
 			                echo '<p class="description">' . __( "Select the page you want to display the content of. If your page isn't in the list simply click on the <i>blue button</i> again.", 'fbfeed' ) . '</p>';
 		                }
