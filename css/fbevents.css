@@ -2,6 +2,7 @@
 .fbevents {
     overflow: hidden;
     border-radius: 3px;
+    background-color: #f6f7f9;
 }
 
 .fbevents,
@@ -15,12 +16,12 @@
     font-size: 12px;
     line-height: 1.38;
     overflow-y: auto;
+    max-width: 500px; 
     margin: 0 auto;
     padding: 8px;
     padding-bottom: 0;
     list-style: none;
-    color: #4b4f56; 
-    background: #f6f7f9;
+    color: #4b4f56;
     -webkit-text-size-adjust: none;
        -moz-text-size-adjust: none;
         -ms-text-size-adjust: none;
@@ -28,7 +29,6 @@
 }
 
 .fbevents > ul li {
-    max-width: 500px; 
     padding: 12px 15px;
     background-color: #fff;
 }
@@ -88,6 +88,7 @@ article.fb-event .event-info {
 
 article.fb-event .event-info > * {
     overflow: hidden;
+    text-align: left; 
     white-space: nowrap;
     text-overflow: ellipsis;
 }

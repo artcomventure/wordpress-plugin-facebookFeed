@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Facebook Feed
  * Description: Auto-embed your (public) Facebook posts.
- * Version: 1.2.1
+ * Version: 1.2.2
  * Text Domain: fbfeed
  * Author: artcom venture GmbH
  * Author URI: http://www.artcom-venture.de/

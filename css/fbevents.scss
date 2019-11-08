@@ -1,6 +1,7 @@
 .fbevents {
   border-radius: 3px;
   overflow: hidden;
+  background-color: #F6F7F9;
 
   &, > ul li {
     border: 1px solid;
@@ -13,17 +14,16 @@
     padding: 8px;
     padding-bottom: 0;
     overflow-y: auto;
-    background: #F6F7F9;
     font-family: Helvetica, Arial, sans-serif;
     font-size: 12px;
     line-height: 1.38;
     text-size-adjust: none;
     color: #4b4f56;
+    max-width: 500px;
 
     li {
       background-color: #fff;
       padding: 12px 15px;
-      max-width: 500px;
 
       &:first-child {
         border-radius: 3px 3px 0 0;
@@ -85,6 +85,7 @@ article.fb-event {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      text-align: left;
     }
   }
 

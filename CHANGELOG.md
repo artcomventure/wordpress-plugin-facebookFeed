@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.2 - 2019-11-08
+**Changed**
+
+* Center events on wide screens.
+
 ## 1.2.1 - 2019-11-08
 **Fixed**
 
