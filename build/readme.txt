@@ -61,6 +61,7 @@ Don't hesitate! [Issues](https://github.com/artcomventure/wordpress-plugin-faceb
 **Changed**
 
 * Center events on wide screens.
+* No `ul`-list of events. Just plain `article` in `div`.
 
 = 1.2.1 - 2019-11-08 =
 **Fixed**

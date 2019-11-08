@@ -66,5 +66,5 @@ function fbevents_shortcode( $atts ) {
 		ob_end_clean();
 	}
 
-	return '<div class="fbevents"><ul' . (is_numeric($atts['height']) ? ' style="max-height: ' . $atts['height'] . 'px;"' : '') . '><li>' . implode( '</li><li>', $events ) . '</li></ul></div>';
+	return '<div class="fbevents"' . (is_numeric($atts['height']) ? ' style="max-height: ' . $atts['height'] . 'px;"' : '') . '>' . implode( "\n", $events ) . '</div>';
 }

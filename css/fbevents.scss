@@ -2,58 +2,40 @@
   border-radius: 3px;
   overflow: hidden;
   background-color: #F6F7F9;
+  padding: 8px;
+  overflow-y: auto;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.38;
+  text-size-adjust: none;
+  color: #4b4f56;
 
-  &, > ul li {
+  &, .fb-event {
     border: 1px solid;
     border-color: #e5e6e9 #dfe0e4 #d0d1d5;
   }
-
-  > ul {
-    list-style: none;
-    margin: 0 auto;
-    padding: 8px;
-    padding-bottom: 0;
-    overflow-y: auto;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 12px;
-    line-height: 1.38;
-    text-size-adjust: none;
-    color: #4b4f56;
-    max-width: 500px;
-
-    li {
-      background-color: #fff;
-      padding: 12px 15px;
-
-      &:first-child {
-        border-radius: 3px 3px 0 0;
-
-        &:not(:last-child) {
-          margin-bottom: 11px;
-        }
-      }
-
-      &:last-child {
-        border-radius: 0 0 3px 3px;
-        margin-bottom: 8px;
-      }
-
-      + li {
-        margin-top: -1px;
-
-        &:not(:nth-child(2)) {
-          border-top: 0;
-        }
-      }
-
-      &:not(:first-of-type) .event-picture {
-        display: none;
-      }
-    }
-  }
 }
 
-article.fb-event {
+.entry-content article.fb-event {
+  max-width: 500px;
+  background-color: #fff;
+  padding: 12px 15px;
+  margin-right: auto;
+  margin-left: auto;
+
+  &:first-of-type {
+    border-radius: 3px 3px 0 0;
+
+    &:not(:last-child) {
+      margin-bottom: 11px;
+    }
+  }
+
+  &:last-of-type {
+    border-radius: 0 0 3px 3px;
+    margin-bottom: 8px;
+  }
+
   .event-content {
     display: flex;
     align-items: center;
@@ -96,6 +78,11 @@ article.fb-event {
     letter-spacing: 0;
     text-transform: none;
     margin: 0;
+
+    &:before, &:after {
+      content: inherit;
+      content: initial;
+    }
 
     &, a {
       color: #000;
@@ -150,5 +137,17 @@ article.fb-event {
     &-people {
       color: #90949c;
     }
+  }
+
+  + .fb-event {
+    margin-top: -1px;
+
+    &:not(:nth-child(2)) {
+      border-top: 0;
+    }
+  }
+
+  &:not(:first-of-type) .event-picture {
+    display: none;
   }
 }
