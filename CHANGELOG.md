@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.0 - 2019-11-08
+**Added**
+
+* WP fb-post template vs oEmbed.
+
 ## 1.2.2 - 2019-11-08
 **Changed**
 

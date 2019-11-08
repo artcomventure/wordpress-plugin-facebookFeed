@@ -52,7 +52,7 @@ function fbevents_shortcode( $atts ) {
 	}
 
 	// locate template
-	$template = 'fbevent.php';
+	$template = 'content-fbevent.php';
 	if ( file_exists( STYLESHEETPATH . '/template-parts/' . $template ) ) $template = STYLESHEETPATH . '/template-parts/' . $template;
 	elseif ( file_exists( STYLESHEETPATH . '/' . $template ) ) $template = STYLESHEETPATH . '/' . $template;
 	elseif ( file_exists( TEMPLATEPATH . '/template-parts/' . $template ) ) $template = TEMPLATEPATH . '/template-parts/' . $template;
@@ -66,5 +66,6 @@ function fbevents_shortcode( $atts ) {
 		ob_end_clean();
 	}
 
-	return '<div class="fbevents"' . (is_numeric($atts['height']) ? ' style="max-height: ' . $atts['height'] . 'px;"' : '') . '>' . implode( "\n", $events ) . '</div>';
+	if ( $events = trim(implode( "\n", $events )) ) $events = '<div class="fbevents"' . (is_numeric($atts['height']) ? ' style="max-height: ' . $atts['height'] . 'px;"' : '') . '>' . $events . '</div>';
+	return $events;
 }

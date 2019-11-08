@@ -57,6 +57,11 @@ _We test our plugin through its paces, but we advise you to take all safety prec
 Don't hesitate! [Issues](https://github.com/artcomventure/wordpress-plugin-facebookFeed/issues) welcome.
 == Changelog ==
 
+= 1.3.0 - 2019-11-08 =
+**Added**
+
+* WP fb-post template vs oEmbed.
+
 = 1.2.2 - 2019-11-08 =
 **Changed**
 
