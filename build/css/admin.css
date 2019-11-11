@@ -170,7 +170,6 @@ input[id^="fbfeed-page-"]:checked + .vcard .dashicons-yes {
 }
 
 .vcard h3,
-.vcard a,
 .vcard b {
     display: block;
     margin: 0;

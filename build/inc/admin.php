@@ -1,5 +1,9 @@
 <?php
 
+function get_fbfeed_redirect_uri() {
+    return apply_filters( 'fbfeed_redirect_uri', 'https://www.artcom-venture.de/wordpress-plugin-facebook-feed.php' );
+}
+
 // enqueue admin styles and script
 add_action( 'admin_enqueue_scripts', function( $hook ) {
 	if ( $hook != 'posts_page_facebook-feed' ) return;
@@ -8,7 +12,7 @@ add_action( 'admin_enqueue_scripts', function( $hook ) {
 
 	wp_enqueue_script( 'fbfeed-settings', FBFEED_PLUGIN_URL . 'js/admin.min.js', array(), fbfeed_version(), true );
 	wp_add_inline_script( 'fbfeed-settings', "FBFEED_APP_ID = '" . FBFEED_APP_ID ."';
-FBFEED_REDIRECT_URI = '" . apply_filters( 'fbfeed_redirect_uri', 'https://www.artcom-venture.de/wordpress-plugin-facebook-feed.php' ) ."';
+FBFEED_REDIRECT_URI = '" . get_fbfeed_redirect_uri() ."';
 FBFEED_MENU_PAGE_URL = '" . menu_page_url( 'facebook-feed', false ) . "';" );
 } );
 
@@ -32,23 +36,26 @@ add_action( 'admin_menu', function() {
 			$fb = fbfeed_get_sdk();
 
 			// redirect from Facebook with access token
-		    if ( $connecting = isset($_GET['access_token']) ) {
+		    if ( $connecting = isset($_GET['access_token']) || isset($_GET['code']) ) {
 		        try {
-			        // get long time access token
-			        $access_token = $fb->get( add_query_arg( array(
+			        // get long time (user) access token
+                    // ... by code
+			        if ( isset($_GET['code']) ) $access_token = $fb->get( add_query_arg( array(
+				        'client_id' => FBFEED_APP_ID,
+				        'client_secret' => FBFEED_APP_SECRET,
+				        'redirect_uri' => get_fbfeed_redirect_uri(),
+				        'code' => $_GET['code']
+			        ), '/oauth/access_token' ) );
+			        // ... by user token
+			        else $access_token = $fb->get( add_query_arg( array(
 				        'client_id' => FBFEED_APP_ID,
 				        'client_secret' => FBFEED_APP_SECRET,
 				        'grant_type' => 'fb_exchange_token',
 				        'fb_exchange_token' => $_GET['access_token']
 			        ), '/oauth/access_token' ), $_GET['access_token'] );
 
-			        update_option( 'fbfeed_access_token', $access_token = $access_token->getDecodedBody()['access_token'] );
-			        // set/re-new just requested access token
-			        $fb->setDefaultAccessToken( $access_token );
-
-			        // get users app-connected pages
-			        $pages = $fb->get( '/me/accounts' );
-			        $pages = array_column( $pages->getDecodedBody()['data'], 'id' );
+			        // get users app-connected pages (incl. its long time access token)
+			        $pages = $fb->get( '/me/accounts', $access_token->getDecodedBody()['access_token'] )->getDecodedBody()['data'];
                 }
                 catch( Exception $e ) {}
             } ?>
@@ -76,23 +83,26 @@ add_action( 'admin_menu', function() {
 
 	                // no pages => not connecting
                     // ... so maybe get current Facebook page ID
-                    if ( empty($pages) && $page_id = get_option( 'fbfeed_page_id' ) ) $pages = array( $page_id );
+                    if ( empty($pages) && $page_id = get_option( 'fbfeed_page_id' ) ) {
+                        $pages = array(array( 'id' => $page_id, 'access_token' => get_option( 'fbfeed_access_token' ) ));
+                    }
 
 	                if ( !empty($pages) ) {
 		                if ( count($pages) > 1 ) {
 			                echo '<p class="description">' . __( "Select the page you want to display the content of. If your page isn't in the list simply click on the <i>blue button</i> again.", 'fbfeed' ) . '</p>';
 		                }
 
-		                foreach ( $pages as $i => $page_id ) {
+		                foreach ( $pages as $i => $page) {
 			                try {
 			                    // get page data
-				                $page_data = $fb->get( add_query_arg( array( 'fields' => 'name,link,picture{url}' ), "/{$page_id}" ) );
+				                $page_data = $fb->get( add_query_arg( array( 'fields' => 'name,link,picture{url}' ), '/' . $page['id'] ), $page['access_token'] );
 				                $page_data = $page_data->getDecodedBody(); ?>
 
-                                <input<?php checked( $page_id, get_option( 'fbfeed_page_id', $i ?: $page_id ) ) ?>
-                                    type="radio" name="fbfeed_page_id" value="<?php echo $page_id ?>" id="fbfeed-page-<?php echo $page_id ?>" />
+                                <input<?php checked( $page['id'], get_option( 'fbfeed_page_id' ) ) ?>
+                                    type="radio" name="fbfeed_page_id" value="<?php echo $page['id'] ?>" id="fbfeed-page-<?php echo $page['id'] ?>"
+                                    data-access_token="<?php echo $page['access_token'] ?>"/>
 
-				                <label class="vcard" for="fbfeed-page-<?php echo $page_id ?>">
+				                <label class="vcard" for="fbfeed-page-<?php echo $page['id'] ?>">
 
                                     <span class="dashicons dashicons-yes"></span>
                                     <img src="<?php echo $page_data['picture']['data']['url'] ?>" />
@@ -105,19 +115,19 @@ add_action( 'admin_menu', function() {
 					                <?php if ( !$connecting ) : ?>
                                     <div class="page-edit">
                                         <b><?php _e( 'Facebook Page ID or Name', 'fbfeed' ) ?></b>
-                                        <input type="text" value="" class="regular-text" name="fbfeed_page_id_override" placeholder="<?php echo $page_id ?>" />
+                                        <input type="text" value="" class="regular-text" name="fbfeed_page_id_override" placeholder="<?php echo $page['id'] ?>" />
                                         <span class="dashicons dashicons-no-alt" title="<?php _e( 'Cancel' ) ?>"></span>
                                     </div>
 
                                     <div class="actions">
-                                        <span class="dashicons dashicons-edit" title="<?php _e( 'Edit' ) ?>"></span>
+                                        <!--<span class="dashicons dashicons-edit" title="<?php _e( 'Edit' ) ?>"></span>-->
                                         <span class="dashicons dashicons-trash" title="<?php _e( 'Delete' ) ?>"></span>
                                     </div>
                                     <?php endif; ?>
 
 				                </label>
 
-                            <?php if ( !$connecting ) {
+                            <?php if ( false && !$connecting ) {
                                     echo '<p class="description">' . __( 'You can display posts from <b>any</b> public Facebook page. Simply click on the edit icon on the right and enter your desired page.', 'fbfeed' ) . '</p>';
                                 }
 			                }

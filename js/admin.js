@@ -1,6 +1,8 @@
 ( function( $ ) {
 
     $(document).on( 'ready', function() {
+        var $access_token = $( '#fbfeed-access-token' );
+        
         // remove Facebook connect entry
         var $form = $( '#fbfeed-settings-form' ).on( 'click', 'span.dashicons-trash', function() {
             var $vcard = $(this).closest( '.vcard' );
@@ -14,11 +16,12 @@
             $(this).closest( '.vcard' ).removeClass( 'edit' )
                 .find( 'input[name="fbfeed_page_id_override"]' ).val( '' );
         } )
-        .on( 'change', function() {
+        .on( 'change', function( e ) {
             $( '#save-note' ).prop( 'hidden', false );
-        } )
-        .on( 'submit', function() {
 
+            if ( $(e.target).next().is( 'label.vcard' ) ) {
+                $access_token.val( $(e.target).data( 'access_token' ) );
+            }
         } );
 
         // change redirect to without Facebook stuff
@@ -33,7 +36,7 @@
             redirect_uri: FBFEED_REDIRECT_URI,
             scope: 'manage_pages',
             state: encodeURIComponent(window.location),
-            response_type: 'code token',
+            // response_type: 'token',
             display: 'popup'
         }), 'fbfeed', ['width=600', 'height=680', 'toolbar=no'].join(','));
     } );

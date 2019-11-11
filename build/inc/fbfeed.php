@@ -34,8 +34,6 @@ function fbfeed_shortcode( $atts ) {
 		}
 
 		foreach ( $posts as &$post ) {
-			$post_id = 0;
-
 			if ( $template ) {
 				ob_start();
 				require( $template );
@@ -44,7 +42,7 @@ function fbfeed_shortcode( $atts ) {
 			}
 			else { // oEmbed
 				$post = explode( '_', $post['id'] );
-				$url = 'https://www.facebook.com/' . $post[0] . '/posts/' . $post[1];
+				$url = 'https://www.facebook.com/' . ($post_id = $post[0]) . '/posts/' . $post[1];
 
 				$post = wp_oembed_get( $url, ( $atts = wp_parse_args( $atts, wp_embed_defaults( $url ) ) ) );
 				$post = apply_filters( 'embed_oembed_html', $post, $url, $atts, $post_id );
@@ -56,4 +54,14 @@ function fbfeed_shortcode( $atts ) {
 
 	if ( $posts ) $posts = '<div class="fbfeed">' . $posts . '</div>';
 	return $posts;
+}
+
+// change oembed fb posts' fixed width to auto (responsive)
+add_filter( 'embed_oembed_html', 'fbfeed_responsive_post', 10, 4 );
+function fbfeed_responsive_post( $html, $url, $attr, $post_id ) {
+	if ( preg_match( '#^https?://www\.facebook\.com/#i', $url ) ) {
+		$html = preg_replace( '/ data-width="\d+"/', ' data-width="auto"', $html );
+	}
+
+	return $html;
 }

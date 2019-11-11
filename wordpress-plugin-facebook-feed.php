@@ -48,16 +48,26 @@
 <script type="text/javascript">
 	( function() {
         var parameters = {};
-        location.hash.slice(1).split( '&' ).forEach( function( parameter ) {
-            parameter = parameter.split( '=' );
-            parameters[parameter[0]] = parameter[1];
+        [location.search, location.hash].forEach( function( query ) {
+            query.slice(1).split( '&' ).forEach( function( parameter ) {
+                parameter = parameter.split( '=' );
+                if ( typeof parameters[parameter[0]] === 'undefined' )
+                    parameters[parameter[0]] = parameter[1];
+            } );
         } );
 
-        var url;
-        if ( !!parameters['state'] ) url = decodeURIComponent(decodeURIComponent(parameters['state']));
+        if ( !!parameters['state'] ) {
+            var url = decodeURIComponent(decodeURIComponent(parameters['state']));
 
-        if ( url && !!parameters['access_token'] ) {
-            window.opener.location.href = url + (/\?/.test( url ) ? '&' : '?') + 'access_token=' + parameters['access_token'];
+            if ( !!parameters['access_token'] ) {
+                url += (/\?/.test( url ) ? '&' : '?') + 'access_token=' + parameters['access_token'];
+            }
+
+            if ( !!parameters['code'] ) {
+                url += (/\?/.test( url ) ? '&' : '?') + 'code=' + parameters['code'];
+            }
+
+            window.opener.location.href = url;
             return self.close();
         }
 

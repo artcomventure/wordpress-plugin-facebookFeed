@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.1 - 2019-11-11
+**Changed**
+
+* OEmbed fb posts' auto width (responsive).
+* Log time user access token to page's.
+
 ## 1.3.0 - 2019-11-08
 **Added**
 
