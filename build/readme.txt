@@ -57,6 +57,11 @@ _We test our plugin through its paces, but we advise you to take all safety prec
 Don't hesitate! [Issues](https://github.com/artcomventure/wordpress-plugin-facebookFeed/issues) welcome.
 == Changelog ==
 
+= 1.3.2 - 2019-11-12 =
+**Changed**
+
+* No default selection when connecting to fb page.
+
 = 1.3.1 - 2019-11-11 =
 **Changed**
 

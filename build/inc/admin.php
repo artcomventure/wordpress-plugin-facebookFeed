@@ -98,7 +98,7 @@ add_action( 'admin_menu', function() {
 				                $page_data = $fb->get( add_query_arg( array( 'fields' => 'name,link,picture{url}' ), '/' . $page['id'] ), $page['access_token'] );
 				                $page_data = $page_data->getDecodedBody(); ?>
 
-                                <input<?php checked( $page['id'], get_option( 'fbfeed_page_id' ) ) ?>
+                                <input<?php checked( $page['id'], $connecting ?: get_option( 'fbfeed_page_id' ) ) ?>
                                     type="radio" name="fbfeed_page_id" value="<?php echo $page['id'] ?>" id="fbfeed-page-<?php echo $page['id'] ?>"
                                     data-access_token="<?php echo $page['access_token'] ?>"/>
 
