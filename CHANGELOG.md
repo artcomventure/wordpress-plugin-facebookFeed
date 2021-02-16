@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.3 - 2020-02-16
+**Fixed**
+
+* Post oembed.
+
 ## 1.3.2 - 2019-11-12
 **Changed**
 

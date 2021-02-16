@@ -41,11 +41,10 @@ function fbfeed_shortcode( $atts ) {
 				ob_end_clean();
 			}
 			else { // oEmbed
-				$post = explode( '_', $post['id'] );
-				$url = 'https://www.facebook.com/' . ($post_id = $post[0]) . '/posts/' . $post[1];
-
-				$post = wp_oembed_get( $url, ( $atts = wp_parse_args( $atts, wp_embed_defaults( $url ) ) ) );
-				$post = apply_filters( 'embed_oembed_html', $post, $url, $atts, $post_id );
+				$post = $fb->get( add_query_arg( array(
+					'url' => $post['permalink_url']
+				), '/oembed_post' ) );
+				$post = $post->getDecodedBody()['html'];
 			}
 		}
 
