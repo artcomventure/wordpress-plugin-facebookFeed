@@ -24,8 +24,8 @@ function fbfeed_shortcode( $atts ) {
 			$fb = fbfeed_get_sdk();
 
 			// get recent fb posts
-			$query = array( 'limit' => $atts['limit'] );
-			if ( $template ) $query += array( 'fields' => 'permalink_url,message,created_time,full_picture,from{name,link}' );
+			$query = array( 'limit' => $atts['limit'], 'fields' => 'permalink_url' );
+			if ( $template ) $query['fields'] .= ($query['fields'] ? ',' : '') . 'message,created_time,full_picture,from{name,link}';
 			$posts = $fb->get( fbfeed_get_endpoint( 'posts', $query ) );
 			$posts = $posts->getDecodedBody()['data'];
 		}
