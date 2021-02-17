@@ -26,6 +26,7 @@ function fbfeed_shortcode( $atts ) {
 			// get recent fb posts
 			$query = array( 'limit' => $atts['limit'], 'fields' => 'permalink_url' );
 			if ( $template ) $query['fields'] .= ($query['fields'] ? ',' : '') . 'message,created_time,full_picture,from{name,link}';
+			// https://developers.facebook.com/docs/graph-api/reference/v9.0/page/feed
 			$posts = $fb->get( fbfeed_get_endpoint( 'posts', $query ) );
 			$posts = $posts->getDecodedBody()['data'];
 		}
@@ -41,10 +42,16 @@ function fbfeed_shortcode( $atts ) {
 				ob_end_clean();
 			}
 			else { // oEmbed
-				$post = $fb->get( add_query_arg( array(
-					'url' => $post['permalink_url']
-				), '/oembed_post' ) );
-				$post = $post->getDecodedBody()['html'];
+				try {
+					// https://developers.facebook.com/docs/plugins/oembed
+					$post = $fb->get( add_query_arg( array(
+						'url' => $post['permalink_url']
+					), '/oembed_post' ) );
+					$post = $post->getDecodedBody()['html'];
+				}
+				catch( Exception $e ) {
+					$post = null;
+				}
 			}
 		}
 
